@@ -4,25 +4,25 @@ import { ApolloServer } from "apollo-server-express";
 import cors from "cors";
 import express from "express";
 import { buildSchema } from "type-graphql";
-import { DataSource, DataSourceOptions } from "typeorm";
+import { createProductLoader } from "./util/createProductLoader";
+import { ProductResolver } from "./resolvers/product.resolver";
 import path from "path";
-import { Order } from "./entities/Order";
-import { Product } from "./entities/product";
-import { HelloResolver } from "./resolvers/hello";
-
-const options: DataSourceOptions = {
-  type: "postgres",
-  logging: true,
-  // synchronize: true,
-  url: process.env.DATABASE_URL,
-  migrations: [path.join(__dirname, "./migrations/*")],
-  entities: [Product, Order],
-};
+import { createConnection } from "typeorm";
+import { Order } from "./entities/Order.entities";
+import { Product } from "./entities/Product.entities";
+import { OrderResolver } from "./resolvers/order.resolver";
+import { OrderItem } from "./entities/OrderItem.entities";
+import { createOrderItem } from "./util/createOrderItem";
 
 const main = async () => {
-  const dataSource = new DataSource(options);
-
-  const conn = await dataSource.initialize();
+  const conn = await createConnection({
+    type: "postgres",
+    logging: true,
+    // synchronize: true,
+    url: process.env.DATABASE_URL,
+    migrations: [path.join(__dirname, "./migrations/*")],
+    entities: [Product, Order, OrderItem],
+  });
 
   await conn.runMigrations();
 
@@ -38,12 +38,14 @@ const main = async () => {
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [HelloResolver],
+      resolvers: [ProductResolver, OrderResolver],
       validate: false,
     }),
     context: ({ req, res }) => ({
       req,
       res,
+      productLoader: createProductLoader(),
+      orderItemLoader: createOrderItem(),
     }),
   });
 
