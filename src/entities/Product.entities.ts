@@ -4,11 +4,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Order } from "./Order";
 
 @ObjectType()
 @Entity()
@@ -44,12 +42,4 @@ export class Product extends BaseEntity {
   @Field(() => String)
   @UpdateDateColumn()
   updatedAt: Date;
-
-  @Field()
-  @Column()
-  orderId: number;
-
-  @Field(() => Order)
-  @ManyToOne(() => Order, (Order) => Order.product)
-  order: Order;
 }

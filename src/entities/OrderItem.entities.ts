@@ -4,25 +4,38 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Product } from "./product";
+import { Order } from "./Order.entities";
+import { Product } from "./Product.entities";
 
 @ObjectType()
 @Entity()
-export class Order extends BaseEntity {
+export class OrderItem extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Field()
   @Column()
-  email!: string;
+  orderId: number;
 
-  @OneToMany(() => Product, (product) => product.order)
-  product: Product[];
+  @Field(() => Order)
+  @ManyToOne(() => Order)
+  order: Order;
+
+  @Field()
+  @Column()
+  productId: number;
+
+  @Field(() => Product)
+  @ManyToOne(() => Product)
+  product: Product;
+
+  @Column()
+  quantity: number;
 
   @Field(() => String)
   @CreateDateColumn({ type: "date" })
