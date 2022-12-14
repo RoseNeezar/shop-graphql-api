@@ -80,31 +80,31 @@ query SearchProducts($input: ProductSearchInput!) {
 }
 ```
 
-```
- query GetProductById($productId: Int!) {
-    getProductById(productId: $productId) {
-      title
-      description
-      price
-      description
-      quantity
-      picture
-    }
+```graphql
+query GetProductById($productId: Int!) {
+  getProductById(productId: $productId) {
+    title
+    description
+    price
+    description
+    quantity
+    picture
   }
+}
 ```
 
-```
- query GetOrderByEmail($email: String!) {
-    getOrderByEmail(email: $email) {
-      customerEmail,
-      orderItem {
-        productId,
-        product{
-          title
-        }
+```graphql
+query GetOrderByEmail($email: String!) {
+  getOrderByEmail(email: $email) {
+    customerEmail
+    orderItem {
+      productId
+      product {
+        title
       }
     }
   }
+}
 ```
 
 ## Notes
