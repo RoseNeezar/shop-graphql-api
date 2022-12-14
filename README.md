@@ -38,7 +38,7 @@ cp .env.example .env
 yarn then yarn dev
 ```
 
-App runs by default at `http://localhost:4000`
+App runs by default at `http://localhost:4000/graphql`
 
 ## Sample Query and Mutations
 
