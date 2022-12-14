@@ -27,9 +27,9 @@ export class ProductInput {
   picture: string;
 }
 
-enum Sorting {
-  Asc = "ASC",
-  Desc = "DESC",
+export enum Sorting {
+  ASC = "ASC",
+  DESC = "DESC",
 }
 
 registerEnumType(Sorting, {
@@ -40,6 +40,7 @@ registerEnumType(Sorting, {
 @InputType({ description: "Filter by title description, and sorting by price" })
 class ProductSearchInput {
   @Field({ nullable: true })
+  @MinLength(2)
   title: string;
   @Field({ nullable: true })
   description: string;
@@ -51,14 +52,14 @@ class ProductSearchInput {
 export class ProductResolver {
   @Query(() => [Product], { nullable: true })
   async searchProduct(
-    @Arg("input", { nullable: true })
+    @Arg("input", { nullable: true, validate: false })
     { description, title, sort }: ProductSearchInput
   ): Promise<Product[] | undefined> {
     const query = Product.createQueryBuilder("product");
 
-    if (sort === Sorting.Asc) {
+    if (sort === Sorting.ASC) {
       query.orderBy("product.price", "ASC");
-    } else if (sort === Sorting.Desc) {
+    } else if (sort === Sorting.DESC) {
       query.orderBy("product.price", "DESC");
     } else {
       query.orderBy("product.price", "ASC");
