@@ -40,3 +40,11 @@ export const mockProduct = [
     picture: "http://dummyimage.com/224x100.png/ff4444/ffffff",
   },
 ];
+
+export const mockOrderPayload = {
+  customerEmail: "customer@example.com",
+  products: [
+    { id: 1, quantity: 2 },
+    { id: 2, quantity: 1 },
+  ],
+};
