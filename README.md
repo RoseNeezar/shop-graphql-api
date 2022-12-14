@@ -81,7 +81,7 @@ query SearchProducts($input: ProductSearchInput!) {
 ```
 
 ```
- query GetProductById($productId: Int!){
+ query GetProductById($productId: Int!) {
     getProductById(productId: $productId) {
       title
       description
@@ -94,7 +94,7 @@ query SearchProducts($input: ProductSearchInput!) {
 ```
 
 ```
- query GetOrderByEmail($email: String!){
+ query GetOrderByEmail($email: String!) {
     getOrderByEmail(email: $email) {
       customerEmail,
       orderItem {
