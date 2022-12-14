@@ -1,23 +1,33 @@
 import { Connection } from "typeorm";
 import { Product } from "../entities/Product.entities";
 import { graphqlTestCall } from "../test-utils/graphqlTestCall";
-import { mockProduct } from "../test-utils/mock/mockData";
+import { mockOrderPayload, mockProduct } from "../test-utils/mock/mockData";
 import { createTestConn } from "../test-utils/mockDB";
 import { Sorting } from "./product.resolver";
 
 const createProductMutation = `
-mutation CreateProt($input: ProductInput!){
-  createProduct(input: $input) {
-    id
-    title
-    description
-    price
-    description
-    quantity
-    picture
+  mutation CreateProduct($input: ProductInput!){
+    createProduct(input: $input) {
+      id
+      title
+      description
+      price
+      description
+      quantity
+      picture
+    }
   }
-}
 `;
+
+const createOrderMutation = `
+  mutation CreateOrder($input: OrderInput!){
+    createOrder(input: $input) {
+      status,
+      customerEmail
+    }
+  }
+`;
+
 const searchProductQuery = `
   query SearchProducts($input: ProductSearchInput!){
      searchProduct(input: $input) {
@@ -40,6 +50,20 @@ const getProductByIdQuery = `
       description
       quantity
       picture
+    }
+  }
+`;
+
+const getOrderByEmailQuery = `
+  query GetOrderByEmail($email: String!){
+    getOrderByEmail(email: $email) {
+      customerEmail,
+      orderItem {
+        productId,
+        product{
+          title
+        }
+      }
     }
   }
 `;
@@ -136,6 +160,37 @@ describe("resolvers", () => {
     expect(result.data!.searchProduct as typeof mockProduct).toHaveLength(1);
     expect(result.data!.searchProduct[0].title as typeof mockProduct).toEqual(
       "RX-7"
+    );
+  });
+
+  it("should create an order with the specified input", async () => {
+    const result = await graphqlTestCall({
+      source: createOrderMutation,
+      variableValues: {
+        input: {
+          ...mockOrderPayload,
+        },
+      },
+    });
+
+    expect(result.data!.createOrder.customerEmail).toEqual(
+      mockOrderPayload.customerEmail
+    );
+    expect(result.data!.createOrder.status).toEqual("pending");
+  });
+  it("should return the order based on valid email provided", async () => {
+    const result = await graphqlTestCall({
+      source: getOrderByEmailQuery,
+      variableValues: {
+        email: mockOrderPayload.customerEmail,
+      },
+    });
+
+    expect(result.data!.getOrderByEmail.customerEmail).toEqual(
+      mockOrderPayload.customerEmail
+    );
+    expect(result.data!.getOrderByEmail.orderItem).toHaveLength(
+      mockOrderPayload.products.length
     );
   });
 });
