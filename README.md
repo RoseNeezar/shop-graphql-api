@@ -112,6 +112,10 @@ query GetOrderByEmail($email: String!) {
 - For resolver testing, it runs on a testdb instance
 - App db url `postgresql://postgres:postgres_password@localhost:5432/postgres`
 - Test db url `postgresql://postgres:postgres_password@localhost:5431/testdb`
+- To run test ```bash
+  yarn test
+
+```
 
 ## Helpers
 
@@ -120,3 +124,4 @@ Install [lazydocker](https://github.com/jesseduffield/lazydocker). This tool can
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
+```
