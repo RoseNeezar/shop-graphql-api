@@ -1,6 +1,6 @@
 # Online Shop Graphql API
 
-Graphql server application for an online stop
+Graphql server application for an online shop
 
 ## Features
 
