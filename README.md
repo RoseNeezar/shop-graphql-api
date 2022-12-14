@@ -126,7 +126,3 @@ Install [lazydocker](https://github.com/jesseduffield/lazydocker). This tool can
 ## License
 
 [MIT](https://choosealicense.com/licenses/mit/)
-
-```
-
-```
